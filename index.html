@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>She&Soul - Empowering Women's Health</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Added Playfair Display font -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet">
+    
+   <!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ===============================
+   YOUR FIREBASE CONFIG
+================================*/
+const firebaseConfig = {
+  apiKey: "AIzaSyArjGIz-QE18FZ14bvg2XtNsesMLzXXxLw",
+  authDomain: "sheandsoul-website.firebaseapp.com",
+  databaseURL: "https://sheandsoul-website-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "sheandsoul-website",
+  storageBucket: "sheandsoul-website.firebasestorage.app",
+  messagingSenderId: "61411228349",
+  appId: "1:61411228349:web:8f27730d92b625f9c715d4",
+  measurementId: "G-VFL1EF17MS"
+};
+
+/* ===============================
+   INITIALIZE FIREBASE
+================================*/
+const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let userId = null;
+let isAuthReady = false;
+
+/* ===============================
+   AUTH (anonymous login)
+================================*/
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    userId = user.uid;
+    isAuthReady = true;
+    console.log("Firebase Ready. User:", userId);
+  } else {
+    await signInAnonymously(auth);
+  }
+});
+
+/* ===============================
+   HELPER FUNCTION
+================================*/
+function showThankYouMessage(form, thanks) {
+  form.classList.add("hidden");
+  thanks.classList.remove("hidden");
+}
+
+/* ===============================
+   WAITLIST FORM
+================================*/
+document.addEventListener("DOMContentLoaded", () => {
+
+const waitlistForm = document.getElementById("waitlist-form");
+const waitlistThanks = document.getElementById("waitlist-thanks");
+
+waitlistForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("wl-name").value;
+  const email = document.getElementById("wl-email").value;
+
+  try {
+    await addDoc(collection(db, "waitlist"), {
+      name,
+      email,
+      createdAt: serverTimestamp()
+    });
+
+    showThankYouMessage(waitlistForm, waitlistThanks);
+
+  } catch (error) {
+    console.error("Error saving waitlist:", error);
+  }
+});
+
+/* ===============================
+   CAMPUS AMBASSADOR FORM
+================================*/
+
+const ambassadorForm = document.getElementById("ambassador-form");
+const ambassadorThanks = document.getElementById("ambassador-thanks");
+
+ambassadorForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("ca-name").value;
+  const college = document.getElementById("ca-college").value;
+  const year = document.getElementById("ca-year").value;
+  const email = document.getElementById("ca-email").value;
+  const reason = document.getElementById("ca-reason").value;
+
+  try {
+    await addDoc(collection(db, "ambassadorApplications"), {
+      name,
+      college,
+      year,
+      email,
+      reason,
+      createdAt: serverTimestamp()
+    });
+
+    showThankYouMessage(ambassadorForm, ambassadorThanks);
+
+  } catch (error) {
+    console.error("Error saving ambassador form:", error);
+  }
+});
+
+/* ===============================
+   CONSULTANT FORM
+================================*/
+
+const consultantForm = document.getElementById("consultant-form");
+const consultantThanks = document.getElementById("consultant-thanks");
+
+consultantForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("con-name").value;
+  const specialty = document.getElementById("con-specialty").value;
+  const email = document.getElementById("con-email").value;
+  const interest = document.getElementById("con-interest").value;
+
+  try {
+    await addDoc(collection(db, "consultantApplications"), {
+      name,
+      specialty,
+      email,
+      interest,
+      createdAt: serverTimestamp()
+    });
+
+    showThankYouMessage(consultantForm, consultantThanks);
+
+  } catch (error) {
+    console.error("Error saving consultant form:", error);
+  }
+});
+
+});
+</script>
+    
+    <style>
+        html, body {
+    overflow-x: hidden;
+}
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF7FC; /* Base background */
+            color: #5C3D5A; 
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-gradient-bg {
+             background-color: #fdf6ff; /* Fallback color for hero background */
+             position: relative;
+             overflow: hidden;
+             min-height: 100vh; /* Ensure hero takes full viewport height */
+             display: flex;
+             align-items: center; /* Center content vertically */
+        }
+
+        /* Floating Shapes for Background */
+        .shape-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Behind everything */
+            overflow: hidden; 
+        }
+        .shape-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px); /* Increased blur */
+            will-change: transform;
+            opacity: 0.6; /* Slightly increase opacity for better visibility behind blur */
+        }
+        .shape-blob.one {
+            width: 500px;
+            height: 500px;
+            top: -150px;
+            left: -150px;
+            background-color: rgba(203, 160, 227, 0.5); /* Lavender shade 1 */
+            animation: move-blob-1 25s infinite alternate ease-in-out;
+        }
+        .shape-blob.two {
+            width: 600px;
+            height: 600px;
+            bottom: -200px;
+            right: -200px;
+            background-color: rgba(225, 201, 235, 0.4); /* Lighter lavender shade 2 */
+            animation: move-blob-2 30s infinite alternate ease-in-out;
+        }
+        .shape-blob.three {
+            width: 450px;
+            height: 450px;
+            bottom: 50px;
+            left: 20%;
+            background-color: rgba(190, 150, 210, 0.45); /* Darker lavender shade 3 */
+            animation: move-blob-3 20s infinite alternate ease-in-out;
+        }
+        @keyframes move-blob-1 {
+            from { transform: translate(0, 0) rotate(0deg) scale(1.2); }
+            to { transform: translate(100px, 50px) rotate(180deg) scale(1); }
+        }
+        @keyframes move-blob-2 {
+            from { transform: translate(0, 0) rotate(0deg) scale(1); }
+            to { transform: translate(-80px, -60px) rotate(-200deg) scale(1.3); }
+        }
+        @keyframes move-blob-3 {
+            from { transform: translate(0, 0) rotate(0deg) scale(0.9); }
+            to { transform: translate(50px, -100px) rotate(90deg) scale(1.1); }
+        }
+        
+        /* Floating Phone Mockups - now at z-index 1 */
+        .floating-phone {
+            position: absolute;
+            width: 150px; /* Adjust size as needed */
+            height: auto;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: float 6s ease-in-out infinite alternate;
+            z-index: 1; /* In front of blobs, behind glass container */
+        }
+        .floating-phone.left {
+            bottom: 10%;
+            left: 5%;
+            transform: rotate(-15deg);
+            animation-delay: -3s; /* Offset animation */
+        }
+        .floating-phone.right {
+            bottom: 15%;
+            right: 5%;
+            transform: rotate(10deg);
+        }
+         @media (min-width: 768px) {
+             .floating-phone {
+                width: 200px;
+             }
+             .floating-phone.left { left: 15%; }
+             .floating-phone.right { right: 15%; }
+         }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(-15deg); }
+            100% { transform: translateY(-20px) rotate(-10deg); }
+        }
+        .floating-phone.right {
+             @keyframes float {
+                0% { transform: translateY(0px) rotate(10deg); }
+                100% { transform: translateY(-25px) rotate(15deg); }
+            }
+        }
+        
+        #hero-content-container {
+             position: relative;
+             z-index: 2; /* Above floating phones and shapes */
+             width: 100%; /* Ensure container takes width */
+        }
+
+        /* Glassmorphism Effect Container */
+        .glass-container {
+            background-color: rgba(255, 255, 255, 0.25); /* Semi-transparent white */
+            backdrop-filter: blur(15px); /* Blur effect */
+            -webkit-backdrop-filter: blur(15px); /* Safari support */
+            border: 1px solid rgba(255, 255, 255, 0.18); /* Subtle border */
+            border-radius: 1.5rem; /* Rounded corners */
+            padding: 2.5rem 1.5rem; /* Padding inside */
+            margin-left: auto;
+            margin-right: auto;
+             max-width: 90%; /* Limit width */
+             box-shadow: 0 8px 32px 0 rgba(195, 140, 255, 0.1); /* Soft shadow */
+        }
+         @media (min-width: 768px) {
+             .glass-container {
+                 max-width: 70%;
+                 padding: 3.5rem;
+             }
+         }
+         @media (min-width: 1024px) {
+             .glass-container {
+                 max-width: 50%;
+             }
+         }
+
+
+        .logo-text {
+            font-family: 'Playfair Display', serif; /* Apply Playfair Display font */
+            background: linear-gradient(to right, #f5a6e7, #d18bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            /* Glowing effect */
+            text-shadow: 0 0 12px rgba(210, 139, 255, 0.7);
+            transition: text-shadow 0.3s ease;
+        }
+        .logo-text:hover {
+            text-shadow: 0 0 20px rgba(210, 139, 255, 1);
+        }
+        
+        .cta-button-primary {
+            background-image: linear-gradient(to right, #f5a6e7, #d18bff);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .cta-button-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(214, 95, 154, 0.4);
+        }
+        .cta-button-secondary { /* For placeholder nav CTA */
+            background-color: transparent;
+            border: 1px solid #D65F9A;
+            color: #D65F9A;
+        }
+         .cta-button-secondary:hover {
+             background-color: #FCE7F3;
+         }
+        .form-input {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #D65F9A;
+            box-shadow: 0 0 0 3px rgba(214, 95, 154, 0.2);
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #f5a6e7, #d18bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #7a5f78;
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #f5a6e7, #d18bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        .social-card {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(189, 175, 205, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Pushes button to bottom */
+        }
+         .social-card:hover {
+             transform: translateY(-5px);
+             box-shadow: 0 15px 35px rgba(189, 175, 205, 0.2);
+         }
+        .testimonial-card {
+            background-color: #fff;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(189, 175, 205, 0.1);
+        }
+
+        /* --- Flip Card Styles --- */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 380px;
+            perspective: 1500px; /* Increased perspective */
+            margin: 0 auto;
+            transition: transform 0.4s ease;
+        }
+        .flip-card:hover {
+            transform: scale(1.05); /* Pop out effect */
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1); /* Smoother animation curve */
+            transform-style: preserve-3d;
+            box-shadow: 0 15px 35px rgba(189, 175, 205, 0.2); /* Softer shadow */
+            border-radius: 1.25rem;
+        }
+        .flip-card:hover .flip-card-inner,
+        .flip-card:focus-within .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .team-card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .team-card-back {
+            background-image: linear-gradient(to top right, #fdf4ff, #fce7f3);
+            color: #5C3D5A;
+            transform: rotateY(180deg);
+        }
+        .ps-card-front {
+            background-image: linear-gradient(135deg, #ffffff 0%, #fdf9ff 100%);
+            border: 1px solid rgba(233, 213, 255, 0.7);
+        }
+        .ps-card-front svg {
+            filter: drop-shadow(0 4px 8px rgba(156, 137, 184, 0.2));
+            transition: transform 0.3s ease;
+        }
+        .flip-card:hover .ps-card-front svg {
+            transform: scale(1.1);
+        }
+        .ps-card-back {
+            background-image: linear-gradient(135deg, #f5a6e7, #d18bff);
+            color: white;
+            transform: rotateY(180deg);
+        }
+        .ps-card-back h3, .ps-card-back p {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+
+        /* --- Preloader --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #FFF7FC;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(214, 95, 154, 0.2);
+            border-top-color: #D65F9A;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        body.loaded #preloader {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header id="header" class="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold logo-text">She<span style="background: none; -webkit-text-fill-color: #000000; text-shadow: none;">&</span>Soul</a>
+            
+            <nav class="hidden md:flex space-x-8 items-center absolute left-1/2 transform -translate-x-1/2">
+                <a href="#home" class="text-gray-600 hover:text-[#D65F9A] transition">Home</a>
+                <a href="#features" class="text-gray-600 hover:text-[#D65F9A] transition">Features</a>
+                <a href="#community" class="text-gray-600 hover:text-[#D65F9A] transition">Community</a>
+                 <a href="#team" class="text-gray-600 hover:text-[#D65F9A] transition">Team</a>
+                <a href="#testimonials" class="text-gray-600 hover:text-[#D65F9A] transition">Testimonials</a>
+             
+            </nav>
+
+            <a href="#get-involved" class="hidden md:inline-block cta-button-secondary py-2 px-5 rounded-full font-semibold">Join Waitlist</a> 
+            
+            <button id="mobile-menu-button" class="md:hidden">
+                <i data-lucide="menu" class="h-6 w-6 text-[#8D5B8A]"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#home" class="block py-2 text-gray-600 hover:text-[#D65F9A]">Home</a>
+            <a href="#features" class="block py-2 text-gray-600 hover:text-[#D65F9A]">Features</a>
+            <a href="#community" class="block py-2 text-gray-600 hover:text-[#D6S6F9A]">Community</a>
+            <a href="#team" class="block py-2 text-gray-600 hover:text-[#D65F9A]">Team</a>
+            <a href="#testimonials" class="block py-2 text-gray-600 hover:text-[#D65F9A]">Testimonials</a>
+        
+            <a href="#get-involved" class="block mt-4 cta-button-secondary text-center py-2 px-5 rounded-full font-semibold">Join Waitlist</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-gradient-bg pt-32 md:pt-40 pb-20 md:pb-32">
+            
+            <!-- Background Animated Shapes -->
+            <div class="shape-container">
+                <div class="shape-blob one"></div>
+                <div class="shape-blob two"></div>
+                <div class="shape-blob three"></div>
+            </div>
+            
+            <!-- Floating Phones (z-index: 1) -->
+            <img src="https://placehold.co/400x800/E9D5FF/5C3D5A?text=App+Screen+1" alt="App Screenshot 1" class="floating-phone left hidden md:block" data-aos="fade-right" data-aos-delay="300">
+            <img src="https://placehold.co/400x800/FBCFE8/5C3D5A?text=App+Screen+2" alt="App Screenshot 2" class="floating-phone right hidden md:block" data-aos="fade-left" data-aos-delay="300">
+
+            <!-- Glassmorphism Content Container (z-index: 2) -->
+            <div id="hero-content-container" class="container mx-auto px-6 text-center">
+                 <div class="glass-container" data-aos="fade-up">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight font-playfair"><span style="color: #C38CFF;">Empowering</span> <span style="color: #000000;">your health journey.</span></h1>
+                    <p class="mt-6 text-lg text-[#000000] max-w-2xl mx-auto">
+                        She&Soul helps you understand, track, and care for your health — mind, body, and soul. Your personal wellness companion is coming soon.
+                    </p>
+                    <div class="mt-10">
+                        <a href="#get-involved" class="cta-button-primary inline-block py-3 px-10 rounded-full font-semibold text-lg">Join the Waitlist</a>
+                    </div>
+                    <div class="mt-8 flex justify-center items-center space-x-4 text-sm text-gray-700" data-aos="fade-up" data-aos-delay="100">
+                        <i data-lucide="smartphone" class="w-5 h-5"></i>
+                        <span>Coming soon on</span>
+                        <img src="https://img.icons8.com/color/48/google-play.png" alt="Google Play Store" class="w-6 h-6 inline-block">
+                        <img src="https://img.icons8.com/ios-filled/50/mac-os.png" alt="Apple App Store" class="w-6 h-6 inline-block">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section id="community" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="section-title">Join Our Community</h2>
+                    <p class="section-subtitle">
+                        Connect with over <span class="font-bold gradient-text">1000+</span> women on their wellness journey. Find support, share insights, and grow together.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    
+                    <div class="social-card text-center" data-aos="fade-up" data-aos-delay="100">
+                        <div>
+                            <i data-lucide="instagram" class="w-12 h-12 mx-auto text-[#D65F9A] mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-800">Instagram</h3>
+                            <p class="text-gray-500 text-sm mb-1">400+ Followers</p>
+                            <p class="text-gray-600 mt-2 mb-6">Daily updates, empowering memes, and bite-sized health knowledge.</p>
+                        </div>
+                        <a href="https://www.instagram.com/sheandsoul.app" target="_blank" rel="noopener noreferrer" class="cta-button-secondary py-2 px-6 rounded-full font-semibold">Follow Us</a>
+                    </div>
+                    
+                    <div class="social-card text-center" data-aos="fade-up" data-aos-delay="200">
+                        <div>
+                            <i data-lucide="linkedin" class="w-12 h-12 mx-auto text-[#D65F9A] mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-800">LinkedIn</h3>
+                            <p class="text-gray-500 text-sm mb-1">650+ Followers</p>
+                            <p class="text-gray-600 mt-2 mb-6">Company updates, industry insights, and career opportunities.</p>
+                        </div>
+                        <a href="https://www.linkedin.com/company/sheandsoul" target="_blank" rel="noopener noreferrer" class="cta-button-secondary py-2 px-6 rounded-full font-semibold">Connect</a>
+                    </div>
+                    
+                    <div class="social-card text-center" data-aos="fade-up" data-aos-delay="300">
+                         <div>
+                           <i data-lucide="message-circle" class="w-12 h-12 mx-auto text-[#D65F9A] mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-800">WhatsApp Community</h3>
+                             <p class="text-gray-500 text-sm mb-1">200+ members;</p> 
+                            <p class="text-gray-600 mt-2 mb-6">Daily health insights, tips, and direct engagement with the community.</p>
+                        </div>
+                        <a href="https://whatsapp.com/channel/0029Vb6jEaPJJhzSio2Kib0l" target="_blank" rel="noopener noreferrer" class="cta-button-secondary py-2 px-6 rounded-full font-semibold">Join Channel</a>
+                    </div>
+                    
+                    <div class="social-card text-center" data-aos="fade-up" data-aos-delay="400">
+                        <div>
+                            <i data-lucide="twitter" class="w-12 h-12 mx-auto text-[#D65F9A] mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-800">Twitter (X)</h3>
+                            <p class="text-gray-500 text-sm mb-1">100+ Followers</p>
+                            <p class="text-gray-600 mt-2 mb-6">Real-time updates, conversations, and trending health news.</p>
+                        </div>
+                        <a href="https://twitter.com/sheandsoul" target="_blank" rel="noopener noreferrer" class="cta-button-secondary py-2 px-6 rounded-full font-semibold">Follow Us</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Team Section -->
+        <section id="team" class="py-20 md:py-28">
+            <div class="container mx-auto px-6">
+                <div class="text-center">
+                    <h2 class="section-title">Meet Our Team</h2>
+                    <p class="section-subtitle">
+                        We are a passionate team of creators, thinkers, and innovators dedicated to women's health.
+                    </p>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center" data-aos="fade-up">
+                    
+                    <!-- Team Member 1 -->
+                    <div class="text-center p-4 bg-white/50 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="100">
+                        <img src="https://placehold.co/400x400/FCE7F3/8D5B8A?text=Founder" alt="Founder Photo" class="w-48 h-48 mx-auto rounded-full shadow-lg">
+                        <h3 class="mt-6 text-xl font-bold text-[#000000]">Angel Kapoor</h3>
+                        <p class="text-[#D65F9A] font-medium">Founder & CEO</p>
+                        <p class="mt-2 text-[#5C3D5A] text-sm max-w-xs mx-auto">Driven by her own health journey, Angel founded She&Soul to empower women everywhere.</p>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <a href="#" class="text-gray-500 hover:text-[#D65F9A] transition-transform hover:scale-110">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#D65F9A] transition-transform hover:scale-110">
+                                <i data-lucide="linkedin" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Team Member 2 -->
+                    <div class="text-center p-4 bg-white/50 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                        <img src="https://placehold.co/400x400/E9D5FF/8D5B8A?text=Co-Founder" alt="Co-Founder Photo" class="w-48 h-48 mx-auto rounded-full shadow-lg">
+                       <h3 class="mt-6 text-xl font-bold text-[#000000]">Ujjwal Kumar Singh</h3>
+                        <p class="text-[#D65F9A] font-medium">Co-Founder, CMO</p>
+                        <p class="mt-2 text-[#5C3D5A] text-sm max-w-xs mx-auto">Ujjwal brings the She&Soul vision to life with his expertise in marketing and design.</p>
+                         <div class="mt-4 flex justify-center space-x-4">
+                            <a href="#" class="text-gray-500 hover:text-[#D65F9A] transition-transform hover:scale-110">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#D65F9A] transition-transform hover:scale-110">
+                                <i data-lucide="linkedin" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 3 -->
+                    <div class="text-center p-4 bg-white/50 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="300">
+                       <img src="https://placehold.co/400x400/FBCFE8/8D5B8A?text=Developer" alt="Lead Developer Photo" class="w-48 h-48 mx-auto rounded-full shadow-lg">
+                       <h3 class="mt-6 text-xl font-bold text-[#000000]">Nitish Kumar</h3>
+                        <p class="text-[#D65F9A] font-medium">Lead Developer</p>
+                        <p class="mt-2 text-[#5C3D5A] text-sm max-w-xs mx-auto">Nitish brings the She&Soul vision to life with her expertise in Development.</p>
+                         <div class="mt-4 flex justify-center space-x-4">
+                            <a href="#" class="text-gray-500 hover:text-[#D65F9A] transition-transform hover:scale-110">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#D65F9A] transition-transform hover:scale-110">
+                                <i data-lucide="linkedin" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section (Problem/Solution) -->
+        <section id="features" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="section-title">How She&Soul Helps</h2>
+                    <p class="section-subtitle">
+                        Bridging the gap between everyday health challenges and empowering solutions.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8 items-center">
+                    <!-- Problems List -->
+                    <div class="space-y-6 text-right" data-aos="fade-right">
+                        <div class="p-4 rounded-lg hover:bg-rose-50 transition">
+                            <h4 class="font-semibold text-lg text-gray-700">Irregular Cycle Tracking</h4>
+                            <p class="text-sm text-gray-500">Difficulty in tracking periods accurately.</p>
+                        </div>
+                         <div class="p-4 rounded-lg hover:bg-purple-50 transition">
+                            <h4 class="font-semibold text-lg text-gray-700">PCOS/Breast Health Uncertainty</h4>
+                            <p class="text-sm text-gray-500">Lack of accessible tools for risk awareness.</p>
+                        </div>
+                         <div class="p-4 rounded-lg hover:bg-blue-50 transition">
+                            <h4 class="font-semibold text-lg text-gray-700">Lack of Personalized Guidance</h4>
+                            <p class="text-sm text-gray-500">Generic health advice doesn't fit all.</p>
+                        </div>
+                        <div class="p-4 rounded-lg hover:bg-emerald-50 transition">
+                            <h4 class="font-semibold text-lg text-gray-700">Mental Stress & Overwhelm</h4>
+                            <p class="text-sm text-gray-500">Daily stress and feeling overwhelmed.</p>
+                        </div>
+                    </div>
+                    <!-- App Mockup -->
+                    <div class="my-8 md:my-0" data-aos="zoom-in">
+                        <img src="https://placehold.co/400x800/FFFFFF/D18BFF?text=She&Soul+App" alt="She&Soul App Feature Screen" class="mx-auto rounded-3xl shadow-2xl">
+                    </div>
+                     <!-- Solutions List -->
+                    <div class="space-y-6 text-left" data-aos="fade-left">
+                        <div class="p-4 rounded-lg hover:bg-rose-50 transition">
+                            <h4 class="font-semibold text-lg text-gray-700">Smart Cycle Prediction</h4>
+                            <p class="text-sm text-gray-500">AI-powered tracking for accurate insights.</p>
+                        </div>
+                         <div class="p-4 rounded-lg hover:bg-purple-50 transition">
+                            <h4 class="font-semibold text-lg text-gray-700">Risk Assessment Tools</h4>
+                            <p class="text-sm text-gray-500">Early awareness for PCOS & breast health.</p>
+                        </div>
+                         <div class="p-4 rounded-lg hover:bg-blue-50 transition">
+                            <h4 class="font-semibold text-lg text-gray-700">Personalized Wellness Plans</h4>
+                            <p class="text-sm text-gray-500">Tailored diet, workout, and mental wellness.</p>
+                        </div>
+                        <div class="p-4 rounded-lg hover:bg-emerald-50 transition">
+                            <h4 class="font-semibold text-lg text-gray-700">Mental Wellness Support</h4>
+                            <p class="text-sm text-gray-500">Tools and resources for mental peace.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Join Waitlist CTA Section (Variant) -->
+        <section class="py-20 md:py-28">
+             <div class="container mx-auto px-6">
+                 <div class="grid md:grid-cols-2 gap-12 items-center">
+                     <div data-aos="fade-right">
+                         <h2 class="text-3xl md:text-4xl font-bold font-playfair leading-tight text-gray-800">Ready to take control?</h2>
+                         <p class="mt-6 text-lg text-gray-600">Be the first to experience She&Soul. Join our waitlist today and get exclusive early access, updates, and wellness tips delivered straight to your inbox.</p>
+                         <div class="mt-8">
+                             <a href="#get-involved" class="cta-button-primary inline-block py-3 px-10 rounded-full font-semibold text-lg">Join the Waitlist</a>
+                         </div>
+                     </div>
+                     <div data-aos="fade-left">
+                         <img src="https://placehold.co/600x600/FCE7F3/8D5B8A?text=She&Soul+App+Focus" alt="App Mockup focus screen" class="rounded-2xl shadow-xl w-full max-w-md mx-auto">
+                     </div>
+                 </div>
+             </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="section-title">From Our Beta Testers</h2>
+                    <p class="section-subtitle">
+                        Hear what women are saying about their early experience with She&Soul.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/60x60/E9D5FF/5C3D5A?text=A" alt="Avatar A" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <p class="font-semibold text-gray-800">Ananya S.</p>
+                                <p class="text-sm text-gray-500">Student</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 italic">"Finally, an app that understands me! The personalized tips are incredibly helpful, and the community feels so supportive."</p>
+                    </div>
+                     <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                         <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/60x60/FBCFE8/5C3D5A?text=P" alt="Avatar P" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <p class="font-semibold text-gray-800">Priya K.</p>
+                                <p class="text-sm text-gray-500">Working Professional</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 italic">"Tracking my cycle has never been easier. I love how She&Soul integrates everything from health to wellness in one place."</p>
+                    </div>
+                     <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                         <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/60x60/BFDBFE/5C3D5A?text=S" alt="Avatar S" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <p class="font-semibold text-gray-800">Sneha M.</p>
+                                <p class="text-sm text-gray-500">New Mother</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 italic">"The mental wellness features are a lifesaver. It's more than just a period tracker; it feels like a companion."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Forms Section -->
+        <section id="get-involved" class="py-20 md:py-28">
+            <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-16">
+                <!-- Join Waitlist Form -->
+                <div class="bg-white p-8 md:p-12 rounded-2xl shadow-lg" data-aos="fade-right">
+                     <div class="text-center">
+                        <h2 class="section-title"><span style="color: #000000; -webkit-text-fill-color: initial; background: none;">Join the</span> Waitlist</h2>
+                        <p class="section-subtitle">Get early access and be the first to know when we launch!</p>
+                    </div>
+                    <form id="waitlist-form">
+                        <div class="space-y-6">
+                            <div>
+                                <label for="wl-name" class="font-medium text-[#000000]">Name</label>
+                                <input type="text" id="wl-name" name="name" class="form-input mt-2" placeholder="Your Name" required>
+                            </div>
+                            <div>
+                                <label for="wl-email" class="font-medium text-[#000000]">Email Address</label>
+                                <input type="email" id="wl-email" name="email" class="form-input mt-2" placeholder="you@example.com" required>
+                            </div>
+                            <button type="submit" class="w-full cta-button-primary py-3 px-8 rounded-full font-semibold text-lg">Join Now</button>
+                        </div>
+                    </form>
+                    <div id="waitlist-thanks" class="hidden text-center bg-green-50 p-6 rounded-lg">
+                        <h4 class="text-xl font-semibold text-green-800">Thank you!</h4>
+                        <p class="text-green-700 mt-2">You're on the list! We'll be in touch soon.</p>
+                    </div>
+                </div>
+
+                 <!-- Campus Ambassador Form -->
+                <div class="bg-white p-8 md:p-12 rounded-2xl shadow-lg" data-aos="fade-left">
+                    <div class="text-center">
+                        <h2 class="section-title"><span style="color: #000000; -webkit-text-fill-color: initial; background: none;">Become a</span> Campus Ambassador</h2>
+                        <p class="section-subtitle">Represent She&Soul at your college and empower your peers.</p>
+                    </div>
+                    <form id="ambassador-form">
+                       <div class="space-y-6">
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="ca-name" class="font-medium text-[#000000]">Name</label>
+                                    <input type="text" id="ca-name" class="form-input mt-2" placeholder="Your Name" required>
+                                </div>
+                                <div>
+                                    <label for="ca-college" class="font-medium text-[#000000]">College/University</label>
+                                    <input type="text" id="ca-college" class="form-input mt-2" placeholder="Your College" required>
+                                </div>
+                            </div>
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                 <div>
+                                    <label for="ca-year" class="font-medium text-[#000000]">Year of Study</label>
+                                    <input type="text" id="ca-year" class="form-input mt-2" placeholder="e.g., 2nd Year" required>
+                                </div>
+                                <div>
+                                    <label for="ca-email" class="font-medium text-[#000000]">Email Address</label>
+                                    <input type="email" id="ca-email" class="form-input mt-2" placeholder="Your Email" required>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="ca-reason" class="font-medium text-[#000000]">Why do you want to join?</label>
+                                <textarea id="ca-reason" rows="4" class="form-input mt-2" placeholder="Share your passion..." required></textarea>
+                            </div>
+                            <button type="submit" class="w-full cta-button-primary py-3 px-8 rounded-full font-semibold text-lg">Apply Now</button>
+                        </div>
+                    </form>
+                     <div id="ambassador-thanks" class="hidden text-center bg-green-50 p-6 rounded-lg">
+                        <h4 class="text-xl font-semibold text-green-800">Thank you for applying!</h4>
+                        <p class="text-green-700 mt-2">We'll review your application and be in touch.</p>
+                    </div>
+                </div>
+
+                <!-- Consultant Form -->
+                <div class="lg:col-span-2 mt-12 lg:mt-0 bg-white p-8 md:p-12 rounded-2xl shadow-lg" data-aos="fade-up">
+                    <div class="text-center">
+                        <h2 class="section-title"><span style="color: #000000; -webkit-text-fill-color: initial; background: none;">Join as a</span> Consultant</h2>
+                        <p class="section-subtitle">Are you a healthcare professional or wellness expert? Partner with us.</p>
+                    </div>
+                    <form id="consultant-form">
+                       <div class="space-y-6">
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="con-name" class="font-medium text-[#000000]">Name</label>
+                                    <input type="text" id="con-name" class="form-input mt-2" placeholder="Your Name" required>
+                                </div>
+                                <div>
+                                    <label for="con-specialty" class="font-medium text-[#000000]">Specialty/Expertise</label>
+                                    <input type="text" id="con-specialty" class="form-input mt-2" placeholder="e.g., Gynecologist, Nutritionist" required>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="con-email" class="font-medium text-[#000000]">Email Address</label>
+                                <input type="email" id="con-email" class="form-input mt-2" placeholder="Your Email" required>
+                            </div>
+                            <div>
+                                <label for="con-interest" class="font-medium text-[#000000]">Area of Interest</label>
+                                <textarea id="con-interest" rows="4" class="form-input mt-2" placeholder="How would you like to contribute?" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full cta-button-primary py-3 px-8 rounded-full font-semibold text-lg">Submit Interest</button>
+                        </div>
+                    </form>
+                     <div id="consultant-thanks" class="hidden text-center bg-green-50 p-6 rounded-lg">
+                        <h4 class="text-xl font-semibold text-green-800">Thank you for your interest!</h4>
+                        <p class="text-green-700 mt-2">We'll reach out to discuss potential collaboration.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Final CTA Section -->
+        <section id="final-cta" class="py-20 md:py-28 text-center">
+            <div class="container mx-auto px-6" data-aos="fade-up">
+                 <h2 class="text-3xl md:text-4xl font-bold font-playfair leading-tight text-gray-800">Don't Miss Out</h2>
+                 <p class="mt-4 text-lg text-gray-600 max-w-xl mx-auto">Be part of the She&Soul journey from the very beginning. Join the waitlist for exclusive updates and early access.</p>
+                 <div class="mt-8">
+                     <a href="#get-involved" class="cta-button-primary inline-block py-3 px-10 rounded-full font-semibold text-lg">Join the Waitlist Now</a>
+                 </div>
+            </div>
+        </section>
+    
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-purple-100/50 relative z-10">
+        <div class="container mx-auto px-6 py-16">
+             <div class="grid md:grid-cols-3 gap-12">
+                <div class="md:col-span-1">
+                    <a href="#" class="text-3xl font-bold logo-text">She<span style="background: none; -webkit-text-fill-color: #000000; text-shadow: none;">&</span>Soul</a>
+                    <p class="mt-4 text-[#5C3D5A] max-w-sm">Empowering women to understand, track, and care for their health — mind, body, and soul.</p>
+                </div>
+                 <div class="grid grid-cols-2 md:col-span-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-[#8D5B8A] tracking-wider uppercase">Navigate</h4>
+                        <ul class="mt-4 space-y-3">
+                            <li><a href="#features" class="text-gray-600 hover:text-[#D65F9A]">Features</a></li>
+                            <li><a href="#community" class="text-gray-600 hover:text-[#D65F9A]">Community</a></li>
+                            <li><a href="#team" class="text-gray-600 hover:text-[#D65F9A]">Our Team</a></li>
+                            <li><a href="#contact" class="text-gray-600 hover:text-[#D65F9A]">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-[#8D5B8A] tracking-wider uppercase">Stay Updated</h4>
+                         <form class="mt-4 flex">
+                            <input type="email" placeholder="Enter your email" class="form-input rounded-r-none">
+                            <button type="submit" class="text-white px-4 rounded-r-lg font-semibold transition-opacity" style="background-image: linear-gradient(to right, #f5a6e7, #d18bff); hover:opacity: 0.9;">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-purple-200/60 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2024 She&Soul. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        // --- Preloader ---
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // AOS Initialization
+        AOS.init({ duration: 800, once: true, offset: 50 });
+
+        // Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+      
+        // Wellness Section Filtering Logic (if present)
+        const wellnessTabs = document.querySelectorAll('.wellness-tab');
+        const wellnessItems = document.querySelectorAll('.wellness-item');
+        if (wellnessTabs.length > 0) {
+            wellnessTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    wellnessTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const filter = tab.dataset.filter;
+                    wellnessItems.forEach(item => {
+                        item.style.display = 'none';
+                        if (filter === 'all' || item.classList.contains(filter)) {
+                            item.style.animation = 'fadeIn 0.5s';
+                            item.style.display = 'block';
+                        }
+                    });
+                });
+            });
+            const fadeInStyle = document.createElement('style');
+            fadeInStyle.innerHTML = `@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`;
+            document.head.appendChild(fadeInStyle);
+        }
+
+        // Hero Image Parallax (if image exists)
+        window.addEventListener('scroll', () => {
+            const heroImage = document.getElementById('hero-image');
+            if(heroImage) {
+                 const scrollPosition = window.pageYOffset;
+                 heroImage.style.transform = `translateY(${scrollPosition * 0.2}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
